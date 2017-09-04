@@ -9,7 +9,7 @@ if(Test-Path .\artifacts) {
 
 & dotnet restore --no-cache
 
-foreach ($src in ls src/*) {
+foreach ($src in ls .\src\*) {
     Push-Location $src
 
 	echo "build: Packaging project in $src"
@@ -18,6 +18,10 @@ foreach ($src in ls src/*) {
     if($LASTEXITCODE -ne 0) { exit 1 }    
 
     Pop-Location
+}
+
+foreach ($nupkg in ls .\artifacts\*.nupkg) {
+	echo "##teamcity[publishArtifacts '$nupkg']"
 }
 
 Pop-Location
