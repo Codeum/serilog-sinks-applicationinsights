@@ -1,13 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{037440DE-440B-4129-9F7A-09B42D00397E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{E9D1B5E1-DEB9-4A04-8BAB-24EC7240ADAF}"
 	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
 		Build.ps1 = Build.ps1
 		assets\CommonAssemblyInfo.cs = assets\CommonAssemblyInfo.cs
 		README.md = README.md
@@ -32,5 +31,8 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B572E129-3568-435F-A8E9-366AD7014D8E} = {037440DE-440B-4129-9F7A-09B42D00397E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CC6B64A3-BC1C-4FBD-9AB5-3416247489D4}
 	EndGlobalSection
 EndGlobal
