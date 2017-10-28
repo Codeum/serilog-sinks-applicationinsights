@@ -2,7 +2,7 @@
 
 A sink for Serilog that writes events to Microsoft Application Insights.
  
-[![Build status](https://ci.appveyor.com/api/projects/status/ccgd7k98kbmifl5v/branch/master?svg=true)](https://ci.appveyor.com/project/serilog/serilog-sinks-applicationinsights/branch/master) [![NuGet Version](http://img.shields.io/nuget/v/Serilog.Sinks.ApplicationInsights.svg?style=flat)](https://www.nuget.org/packages/Serilog.Sinks.ApplicationInsights/)
+[![Build status](https://build.codeum.com/app/rest/builds/buildType:%28id:SerilogSinksApplicationinsights_Build%29/statusIcon)](https://build.codeum.com/viewType.html?buildTypeId=SerilogSinksApplicationinsights_Build&guest=1)
 
 This Sink comes with two main helper extensions that send Serilog `LogEvent` messages to Application Insights as either `EventTelemetry`:
 
@@ -163,3 +163,51 @@ var log = new LoggerConfiguration()
 Copyright &copy; 2016 Serilog Contributors - Provided under the [Apache License, Version 2.0](http://apache.org/licenses/LICENSE-2.0.html).
 
 See also: [Serilog Documentation](https://github.com/serilog/serilog/wiki)
+
+## Accessing structured data
+
+Serilog data is formatted as JSON and made available in the `customDimensions` property. [Log Analytics](https://docs.microsoft.com/en-us/azure/application-insights/app-insights-analytics) can be used to drill into this data. Use the [`todynamic`](https://docs.loganalytics.io/docs/Language-Reference/Scalar-functions/todynamic()) scalar function to convert the JSON:
+
+```
+traces | extend properties = todynamic(tostring(customDimensions))
+```
+
+The `properties` calculated column has three property values:
+
+- `LogLevel`: The Serilog log event level (`Verbose`, `Debug`, `Information`, `Warning`, `Error` or `Fatal`)
+- `MessageTemplate`: The Serilog message template
+- `RenderedMessage`: The Serilog log event rendered as text
+
+The last property is only included when logging as custom events. However, when logging as traces then the rendered message is directly available in the `message` column.
+
+Any Serilog named parameters are also included in `customDimensions`.
+
+Assume the following data is logged as traces:
+
+``` csharp
+var position = new { Latitude = 25, Longitude = 134 };
+var elapsedMs = 34;
+
+log.Information("Processed {@Position} in {Elapsed} ms.", position, elapsedMs);
+```
+
+Then Log Analytics can be used to filter on `Elapsed`:
+
+```
+traces
+    | extend properties = todynamic(tostring(customDimensions))
+    | where properties.Elapsed == 34
+```
+
+While the values of structured objects is displayed when inspecting the `properties` column (and also the `customDimensions` column) it is necessary to use the `todynamic` function to filter on these values:
+
+```
+traces
+    | extend properties = todynamic(tostring(customDimensions))
+    | extend position = todynamic(tostring(properties.Position))
+    | where position.Latitude == 25
+```
+
+This procedure has to be repeated when drilling deeper into subobjects.
+
+The type of a structured value is available in the `_typeName` property (not included for simple or compiler generated types).

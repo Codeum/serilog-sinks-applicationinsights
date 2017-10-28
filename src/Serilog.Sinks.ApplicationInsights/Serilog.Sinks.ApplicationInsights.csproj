@@ -2,8 +2,9 @@
 
   <PropertyGroup>
     <Description>Serilog event sink that writes Microsoft Application Insights.</Description>
-    <VersionPrefix>2.2.1</VersionPrefix>
-    <Authors>Joerg Battermann</Authors>
+    <VersionPrefix>2.3.1</VersionPrefix>
+    <Authors>Joerg Battermann, Martin Liversage</Authors>
+    <Company>Joerg Battermann, Codeum</Company>
     <TargetFrameworks>net45;netstandard1.3;netstandard1.6</TargetFrameworks>
     <AssemblyName>Serilog.Sinks.ApplicationInsights</AssemblyName>
     <AssemblyOriginatorKeyFile>../../assets/Serilog.snk</AssemblyOriginatorKeyFile>
@@ -31,7 +32,7 @@
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net45' ">
-    <DefineConstants>$(DefineConstants);EXCEPTION_TELEMETRY_HANDLED_AT</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET45</DefineConstants>
   </PropertyGroup>
 
 </Project>
