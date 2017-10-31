@@ -20,7 +20,10 @@ namespace Serilog.Sinks.ApplicationInsights
             }
             var stringWriter = new StringWriter(CultureInfo.InvariantCulture);
             JsonValueFormatter.Format(value, stringWriter);
-            properties[key] = stringWriter.ToString();
+            var formattedValue = stringWriter.ToString();
+            if (formattedValue.Length >= 2 && formattedValue[0] == '"' && formattedValue[formattedValue.Length - 1] == '"')
+                formattedValue = formattedValue.Substring(1, formattedValue.Length - 2);
+            properties[key] = formattedValue;
         }
 
         private static void AppendProperty(IDictionary<string, string> propDictionary, string key, string value)

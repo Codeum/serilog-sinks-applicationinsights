@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>Serilog event sink that writes Microsoft Application Insights.</Description>
-    <VersionPrefix>2.3.1</VersionPrefix>
+    <VersionPrefix>2.3.2</VersionPrefix>
     <Authors>Joerg Battermann, Martin Liversage</Authors>
     <Company>Joerg Battermann, Codeum</Company>
     <TargetFrameworks>net45;netstandard1.3;netstandard1.6</TargetFrameworks>
